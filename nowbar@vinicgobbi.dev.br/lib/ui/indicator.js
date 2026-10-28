@@ -139,7 +139,8 @@ class NowbarIndicator extends PanelMenu.Button {
     _sync() {
         const s = this._service;
         const a = this._pillActivity();
-        this.visible = !!a || s.prefs.whenEmpty !== 'hide' || this.menu.isOpen;
+        // Nothing to show: no pill, unless the options ask for the empty one.
+        this.visible = !!a || s.prefs.whenEmpty === 'icon' || this.menu.isOpen;
         this._pill.show(a);
         this.accessible_name = Model.tooltipLabel(a, s.focusIndex, s.activities.length);
         if (this.menu.isOpen)

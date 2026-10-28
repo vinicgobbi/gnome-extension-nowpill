@@ -159,7 +159,7 @@ export default class NowbarPreferences extends ExtensionPreferences {
         pill.add(comboRow(s, 'pill-width', 'Width', [['fixed', 'Fixed'], ['fit', 'Fit the text, up to the width']]));
         pill.add(spinRow(s, 'max-width', 'Text width (px)', 80, 600));
         pill.add(comboRow(s, 'when-empty', 'When nothing is going on',
-            [['brief', 'Show the weather'], ['icon', 'An empty pill'], ['hide', 'Hide the pill']]));
+            [['brief', 'Show the weather, or hide the pill'], ['icon', 'An empty pill'], ['hide', 'Hide the pill']]));
         pill.add(switchRow(s, 'show-count', 'Position marker (2/4)'));
         pill.add(switchRow(s, 'cover-accent', 'Colors from the album cover and the sky'));
         pill.add(switchRow(s, 'animations', 'Animations'));
