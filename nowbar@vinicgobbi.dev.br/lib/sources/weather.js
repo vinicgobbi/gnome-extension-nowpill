@@ -47,6 +47,30 @@ function skyColor(icon, night) {
     return night ? '#4a56c8' : '#f2a33a';
 }
 
+// A name for the sky from its icon, for when GWeather has neither
+// conditions nor a sky to tell (get_sky() then says "Unknown").
+const ICON_DESC = [
+    [/storm/, 'Thunderstorm'], [/snow/, 'Snow'], [/showers-scattered/, 'Scattered showers'],
+    [/showers|rain/, 'Showers'], [/drizzle/, 'Drizzle'], [/fog/, 'Fog'], [/windy/, 'Windy'],
+    [/overcast/, 'Overcast'], [/few-clouds/, 'Partly cloudy'], [/clear/, 'Clear'],
+];
+
+function describe(info, icon) {
+    const [okCond, phenomenon] = info.get_value_conditions();
+    if (okCond && phenomenon !== GWeather.ConditionPhenomenon.NONE) {
+        const c = info.get_conditions();
+        if (c && c !== '-')
+            return c;
+    }
+    const [okSky, sky] = info.get_value_sky();
+    if (okSky && sky !== GWeather.Sky.INVALID) {
+        const s = info.get_sky();
+        if (s && s !== '-')
+            return s;
+    }
+    return ICON_DESC.find(([re]) => re.test(icon ?? ''))?.[1] ?? '';
+}
+
 function pad2(n) {
     return (n < 10 ? '0' : '') + n;
 }
@@ -214,7 +238,7 @@ export class WeatherSource extends EventEmitter {
             temp: t,
             unit: unit === GWeather.TemperatureUnit.FAHRENHEIT ? '°F' : '°C',
             feels: okFeels ? Math.round(feels) : t,
-            desc: Model.clean(info.get_conditions() !== '-' ? info.get_conditions() : info.get_sky(), 40),
+            desc: Model.clean(describe(info, icon), 40),
             night,
             icon,
             color: skyColor(icon, night),
