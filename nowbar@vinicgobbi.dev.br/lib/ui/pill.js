@@ -4,7 +4,7 @@ import St from 'gi://St';
 
 import * as Model from '../model.js';
 import {IDLE, batteryIcon, iconFor} from '../icons.js';
-import {MonochromeEffect, PillWave, appFor, hbox, label, readableOn, symbolicIcon} from './widgets.js';
+import {Marquee, MonochromeEffect, PillWave, appFor, hbox, label, readableOn, symbolicIcon} from './widgets.js';
 
 // The pill itself: an activity's icon and text and the 2/4 marker. Music
 // shows the player's app icon (in one color) on the cover's accent color,
@@ -100,10 +100,12 @@ export class Pill {
         this._row = row;
         // Not 'system-status-icon': themes pad that one.
         this._icon = new St.Icon({style_class: 'nowbar-icon', icon_name: IDLE, y_align: Clutter.ActorAlign.CENTER});
-        this._label = label('', 'nowbar-label');
+        // Never cut with "...": a new song (or anything new) goes by whole
+        // once, then rests on its start, faded where it's cut.
+        this._text = new Marquee('nowbar-label', {once: true});
         this._count = label('', 'nowbar-count');
         row.add_child(this._icon);
-        row.add_child(this._label);
+        row.add_child(this._text.actor);
         row.add_child(this._count);
         this.actor.add_child(row);
     }
@@ -143,18 +145,18 @@ export class Pill {
         const classes = {urgent: false, charging: false, paused: false, idle: !a};
 
         const width = Math.round(p.maxWidth * this._widthScale);
-        this._style(this._label, p.pillWidth === 'fit' ? `max-width: ${width}px;` : `width: ${width}px;`);
+        this._style(this._text.actor, p.pillWidth === 'fit' ? `max-width: ${width}px;` : `width: ${width}px;`);
 
         if (!a) {
             this._icon.icon_name = IDLE;
             this._icon.visible = true;
-            this._label.visible = false;
+            this._text.actor.visible = false;
             this._count.visible = false;
             this._setMonochrome(false);
             this._tint = null;
         } else {
-            this._label.visible = true;
-            this._label.text = a.pillText || a.title;
+            this._text.actor.visible = true;
+            this._text.setText(a.pillText || a.title);
             const media = a.module === 'media';
             const appIcon = media ? this._appIcon(a) : null;
             if (appIcon)
@@ -195,6 +197,15 @@ export class Pill {
             this._shownId = id;
         }
         this.direction = 0;
+        this._text.animate = p.animations;
+        // Music: a new player or song (not play/pause); the rest: when their
+        // state changes.
+        const textKey = a ? `${a.id}:${a.module === 'media' ? a.pillText : a.signature}` : '';
+        if (textKey !== this._textKey) {
+            this._textKey = textKey;
+            if (a)
+                this._text.play();
+        }
         this._easeWidth(fromWidth);
         this._syncWave(a, animate);
         this._pulseIfNew(a);

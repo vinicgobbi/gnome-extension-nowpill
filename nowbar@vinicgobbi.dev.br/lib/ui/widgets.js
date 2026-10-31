@@ -187,14 +187,40 @@ class MonochromeEffect extends Shell.GLSLEffect {
 const MARQUEE_GAP = 40;     // px between the end of the text and its copy
 const MARQUEE_SPEED = 30;   // px/s
 const MARQUEE_PAUSE = 1800; // ms at the start of each round
+const MARQUEE_DELAY = 1000; // ms before a single round (the pill settles first)
+const MARQUEE_FADE = 20;    // px of fade where the text is cut
 
-// Takes no width of its own (the line is as wide as its parent says), as
-// tall as the text. The text keeps its natural width while it scrolls, and
-// is cut to the room (ellipsized) while it doesn't.
+// Fades the actor out toward its edges: `left` and `right` are how much of
+// its width, from each side, goes from clear to whole.
+const FadeEdgesEffect = GObject.registerClass(
+class FadeEdgesEffect extends Shell.GLSLEffect {
+    vfunc_build_pipeline() {
+        this.add_glsl_snippet(Cogl.SnippetHook.FRAGMENT, 'uniform float left; uniform float right;', `
+            float x = cogl_tex_coord_in[0].x;
+            float k = (left > 0.0 ? clamp(x / left, 0.0, 1.0) : 1.0) *
+                (right > 0.0 ? clamp((1.0 - x) / right, 0.0, 1.0) : 1.0);
+            cogl_color_out *= k;`, false);
+    }
+
+    // In px; none on either side turns it off.
+    set(left, right, width) {
+        this.enabled = width > 0 && (left > 0 || right > 0);
+        if (!this.enabled)
+            return;
+        this.set_uniform_float(this.get_uniform_location('left'), 1, [left / width]);
+        this.set_uniform_float(this.get_uniform_location('right'), 1, [right / width]);
+        this.queue_repaint();
+    }
+});
+
+// As tall as the text; no width of its own (the line is as wide as its
+// parent says), or, with `fit`, the text's. The text keeps its natural
+// width while it scrolls, or always with `fit`, and is cut to the room
+// (ellipsized) otherwise.
 const MarqueeLayout = GObject.registerClass(
 class MarqueeLayout extends Clutter.LayoutManager {
     vfunc_get_preferred_width() {
-        return [0, 0];
+        return this.fit ? [0, this.text.get_preferred_width(-1)[1]] : [0, 0];
     }
 
     vfunc_get_preferred_height(container) {
@@ -206,33 +232,49 @@ class MarqueeLayout extends Clutter.LayoutManager {
         if (!child)
             return;
         const [, natural] = child.get_preferred_width(-1);
-        const width = this.scrolling ? natural : Math.min(natural, box.get_width());
+        const width = this.scrolling || this.fit ? natural : Math.min(natural, box.get_width());
         const [, height] = child.get_preferred_height(width);
         child.allocate(new Clutter.ActorBox({x1: box.x1, y1: box.y1, x2: box.x1 + width, y2: box.y1 + height}));
     }
 });
 
-// One line of text that scrolls sideways, round and round, when it doesn't
-// fit (the title of One UI's media card): a copy follows it, so it loops
-// without a jump. Still, and ellipsized, without animations or while not
-// shown.
+// One line of text that scrolls sideways when it doesn't fit (the title of
+// One UI's media card): a copy follows it, so a round ends where it began,
+// without a jump. Round and round, ellipsized while still (without
+// animations or while not shown); or, with `once` (the pill), one round
+// each time `play()` asks for it, then it rests on its start, cut with a
+// fade instead of "...", and takes the text's width.
 export class Marquee {
-    constructor(styleClass) {
+    constructor(styleClass, {once = false} = {}) {
+        this._once = once;
         this._layout = new MarqueeLayout();
-        this.actor = new St.Widget({style_class: 'nowbar-marquee', x_expand: true, clip_to_allocation: true,
-            layout_manager: this._layout});
+        this._layout.fit = once;
+        this.actor = new St.Widget({style_class: 'nowbar-marquee', x_expand: !once, clip_to_allocation: true,
+            layout_manager: this._layout, ...(once ? {y_align: Clutter.ActorAlign.CENTER} : {})});
         this._strip = hbox({style: `spacing: ${MARQUEE_GAP}px;`});
         this._labels = [0, 1].map(() => {
             const l = label('', styleClass);
+            if (once)
+                l.clutter_text.ellipsize = 0; // Pango.EllipsizeMode.NONE
             this._strip.add_child(l);
             return l;
         });
+        this._layout.text = this._labels[0];
         this._labels[1].visible = false;
         this.actor.add_child(this._strip);
+        if (once) {
+            this._fade = new FadeEdgesEffect();
+            this.actor.add_effect(this._fade);
+            this._strip.connect('notify::translation-x', () => this._syncFade());
+        }
         this.animate = true;
         this._markup = null;
         this._state = '';
         this._width = 0;
+        this._pending = false;
+        this._rounding = false;
+        this._overflow = false;
+        this._distance = 0;
         // Sizes are known after a layout: look then, outside of it.
         this.actor.connect('notify::allocation', () => {
             if (this.actor.width !== this._width) {
@@ -254,6 +296,19 @@ export class Marquee {
         this._markup = markup;
         for (const l of this._labels)
             l.clutter_text.set_markup(markup);
+        // A round going on goes on, unless the text's width changed.
+        if (!this._once)
+            this._state = '';
+        this._queueCheck();
+    }
+
+    setText(text) {
+        this.setMarkup(GLib.markup_escape_text(text ?? '', -1));
+    }
+
+    // `once`: one round, as soon as it is shown, if the text doesn't fit.
+    play() {
+        this._pending = true;
         this._state = '';
         this._queueCheck();
     }
@@ -271,27 +326,56 @@ export class Marquee {
     _check() {
         const [, text] = this._labels[0].get_preferred_width(-1);
         const room = this.actor.width;
-        const scroll = this.animate && this.actor.mapped && room > 0 && text > room + 1;
+        this._overflow = room > 0 && text > room + 1;
+        const wanted = !this._once || this._pending || this._rounding;
+        const scroll = wanted && this.animate && this.actor.mapped && this._overflow;
+        if (room > 0 && (!this._overflow || !this.animate))
+            this._pending = false;
         const state = scroll ? `scroll:${text}` : 'still';
-        if (state === this._state)
-            return;
-        this._state = state;
-        this._strip.remove_transition('translation-x');
-        this._strip.translation_x = 0;
-        this._labels[1].visible = scroll;
-        this._layout.scrolling = scroll;
-        this.actor.queue_relayout();
-        if (scroll)
-            this._round(text + MARQUEE_GAP);
+        if (state !== this._state) {
+            this._state = state;
+            this._strip.remove_transition('translation-x');
+            this._strip.translation_x = 0;
+            this._rounding = false;
+            this._labels[1].visible = scroll;
+            this._layout.scrolling = scroll;
+            this.actor.queue_relayout();
+            if (scroll) {
+                this._pending = false;
+                this._rounding = this._once;
+                this._round(text + MARQUEE_GAP);
+            }
+        }
+        this._syncFade();
     }
 
     // Waits, then slides by one text and gap: the copy is then where the
-    // text started, so going back to 0 doesn't show.
+    // text started, so going back to 0 doesn't show. Once: back at the
+    // start, it stays.
     _round(distance) {
+        this._distance = distance;
         this._strip.translation_x = 0;
-        this._strip.ease({translation_x: -distance, delay: MARQUEE_PAUSE,
+        this._strip.ease({translation_x: -distance, delay: this._once ? MARQUEE_DELAY : MARQUEE_PAUSE,
             duration: distance / MARQUEE_SPEED * 1000, mode: Clutter.AnimationMode.LINEAR,
-            onComplete: () => this._round(distance)});
+            onComplete: () => {
+                if (!this._once) {
+                    this._round(distance);
+                    return;
+                }
+                this._rounding = false;
+                this._state = '';
+                this._queueCheck();
+            }});
+    }
+
+    // Cut text fades out at the right; while it slides, at the left too,
+    // growing as it leaves the start and shrinking as its copy gets there.
+    _syncFade() {
+        if (!this._fade)
+            return;
+        const x = -this._strip.translation_x;
+        const left = this._rounding ? Math.max(0, Math.min(MARQUEE_FADE, x, this._distance - x)) : 0;
+        this._fade.set(left, this._overflow ? MARQUEE_FADE : 0, this.actor.width);
     }
 }
 
