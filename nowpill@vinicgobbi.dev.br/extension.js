@@ -62,10 +62,10 @@ export default class NowpillExtension extends Extension {
         }
     }
 
-    // Also called when the session is unlocked and extensions are turned off
-    // there: 'unlock-dialog' is in session-modes only for the pill on the
-    // lock screen (see above), and nothing here is left behind while locked.
     disable() {
+        // 'unlock-dialog' is in session-modes only for the pill on the lock
+        // screen (see above): locking doesn't call this, so everything is
+        // taken down here only when the extension is really turned off.
         Main.sessionMode.disconnectObject(this);
         this._settings.disconnect(this._lockId);
         for (const id of this._placeIds ?? [])

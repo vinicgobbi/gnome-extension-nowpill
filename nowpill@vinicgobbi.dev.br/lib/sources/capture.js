@@ -4,6 +4,8 @@ import GLib from 'gi://GLib';
 import {EventEmitter} from 'resource:///org/gnome/shell/misc/signals.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
+Gio._promisify(Gio.File.prototype, 'load_contents_async');
+
 // GNOME's own screenshot UI: a screen recording going on, a screenshot just
 // taken, a recording just saved.
 
@@ -98,15 +100,13 @@ export class CaptureSource extends EventEmitter {
 }
 
 // Puts a PNG/JPEG on the clipboard as an image.
-export function copyImage(path, St) {
+export async function copyImage(path, St) {
     try {
-        const [, bytes] = GLib.file_get_contents(path);
+        const [bytes] = await Gio.File.new_for_path(path).load_contents_async(null);
         const type = /\.png$/i.test(path) ? 'image/png' : 'image/jpeg';
         St.Clipboard.get_default().set_content(St.ClipboardType.CLIPBOARD, type, new GLib.Bytes(bytes));
-        return true;
     } catch (e) {
         console.warn(`Now Pill: copy ${path}: ${e.message}`);
-        return false;
     }
 }
 

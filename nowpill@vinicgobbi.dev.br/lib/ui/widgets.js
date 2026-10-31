@@ -412,9 +412,16 @@ class WaveMotion {
         this._target = 0;
         this._animate = false;
         this._timeline = new Clutter.Timeline({actor, duration: 1000, repeat_count: -1});
-        this._timeline.connect('new-frame', () => this._frame());
-        actor.connect('notify::mapped', () => this._sync());
-        actor.connect('destroy', () => this._timeline.stop());
+        this._frameId = this._timeline.connect('new-frame', () => this._frame());
+        this._mappedId = actor.connect('notify::mapped', () => this._sync());
+        actor.connect('destroy', () => this.destroy());
+    }
+
+    destroy() {
+        this._timeline.stop();
+        this._timeline.disconnect(this._frameId);
+        this._actor.disconnect(this._mappedId);
+        this._timeline = null;
     }
 
     set(on, animate) {
@@ -428,6 +435,8 @@ class WaveMotion {
     }
 
     _sync() {
+        if (!this._timeline)
+            return;
         const run = this._animate && this._actor.mapped && (this._target > 0 || this.amp > 0);
         if (run && !this._timeline.is_playing()) {
             this._last = GLib.get_monotonic_time();

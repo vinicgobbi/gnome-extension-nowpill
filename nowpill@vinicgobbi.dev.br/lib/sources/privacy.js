@@ -1,3 +1,4 @@
+import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 import Shell from 'gi://Shell';
 
@@ -14,13 +15,16 @@ import * as Volume from 'resource:///org/gnome/shell/ui/status/volume.js';
 // the shell's volume indicator.
 const SKIPPED_APPS = ['org.gnome.VolumeControl', 'org.PulseAudio.pavucontrol'];
 
-function videoUsers() {
-    const names = [];
+Gio._promisify(Gio.File.prototype, 'load_contents_async');
+
+// The processes holding a /dev/video* open.
+function videoPids() {
+    const pids = [];
     let dir;
     try {
         dir = GLib.Dir.open('/proc', 0);
     } catch {
-        return names;
+        return pids;
     }
     let pid;
     while ((pid = dir.read_name()) !== null) {
@@ -39,14 +43,22 @@ function videoUsers() {
             } catch {}
         }
         fds.close();
-        if (!uses)
-            continue;
+        if (uses)
+            pids.push(pid);
+    }
+    dir.close();
+    return pids;
+}
+
+// Their names; one that is gone by then is left out.
+async function videoUsers(cancellable) {
+    const names = [];
+    for (const pid of videoPids()) {
         try {
-            const [, comm] = GLib.file_get_contents(`/proc/${pid}/comm`);
+            const [comm] = await Gio.File.new_for_path(`/proc/${pid}/comm`).load_contents_async(cancellable);
             names.push(new TextDecoder().decode(comm).trim());
         } catch {}
     }
-    dir.close();
     return names;
 }
 
@@ -78,11 +90,17 @@ export class PrivacySource extends EventEmitter {
     _onCamera() {
         if (this._idle)
             GLib.source_remove(this._idle);
+        this._cancellable?.cancel();
+        const cancellable = this._cancellable = new Gio.Cancellable();
         // Off the signal handler: reading /proc takes a moment.
         this._idle = GLib.idle_add(GLib.PRIORITY_LOW, () => {
             this._idle = 0;
-            this._cameraApps = this.cameraActive ? videoUsers() : [];
-            this.emit('changed');
+            (this.cameraActive ? videoUsers(cancellable) : Promise.resolve([])).then(names => {
+                if (cancellable.is_cancelled())
+                    return;
+                this._cameraApps = names;
+                this.emit('changed');
+            });
             return GLib.SOURCE_REMOVE;
         });
     }
@@ -126,5 +144,7 @@ export class PrivacySource extends EventEmitter {
         this._camera = null;
         if (this._idle)
             GLib.source_remove(this._idle);
+        this._cancellable?.cancel();
+        this._cancellable = null;
     }
 }
