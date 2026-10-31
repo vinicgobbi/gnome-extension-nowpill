@@ -102,6 +102,11 @@ the `gdbus call` above (for example with `...NowBar.Toggle`).
 - `make nested` runs a GNOME Shell in a window with the extension installed.
 - `make pack` builds the zip for extensions.gnome.org.
 
+Commits follow Conventional Commits. On each push to `main`, the release
+workflow picks the next version with commitizen (updating `CHANGELOG.md` and
+the `version-name` in `metadata.json`) and publishes the extension's zip as a
+GitHub release.
+
 ## License
 
 MIT
