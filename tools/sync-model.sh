@@ -9,7 +9,7 @@ set -euo pipefail
 
 root=$(cd -- "$(dirname -- "$0")/.." && pwd)
 src=${1:-$root/../omarchy-plugin-nowbar/NowbarModel.js}
-out=$root/nowbar@vinicgobbi.dev.br/lib/model.js
+out=$root/nowpill@vinicgobbi.dev.br/lib/model.js
 
 [[ -f $src ]] || { echo "sync-model: $src not found" >&2; exit 1; }
 

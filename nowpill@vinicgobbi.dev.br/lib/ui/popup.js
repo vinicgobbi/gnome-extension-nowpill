@@ -17,13 +17,13 @@ export class PopupContent {
     constructor(ctx) {
         this._ctx = ctx;
         this._service = ctx.service;
-        this.actor = vbox({style_class: 'nowbar-popup', x_expand: true});
+        this.actor = vbox({style_class: 'nowpill-popup', x_expand: true});
 
         // ‹ dots › … hidden, options
-        const nav = hbox({style_class: 'nowbar-nav'});
+        const nav = hbox({style_class: 'nowpill-nav'});
         this._prev = button({icon: 'go-previous-symbolic', styleClass: 'flat', accessibleName: 'Previous activity',
             onClick: () => this._step(-1)});
-        this._dots = hbox({style_class: 'nowbar-dots', x_expand: true, x_align: Clutter.ActorAlign.CENTER});
+        this._dots = hbox({style_class: 'nowpill-dots', x_expand: true, x_align: Clutter.ActorAlign.CENTER});
         this._next = button({icon: 'go-next-symbolic', styleClass: 'flat', accessibleName: 'Next activity',
             onClick: () => this._step(1)});
         this._hidden = button({icon: 'view-reveal-symbolic', styleClass: 'flat', text: '0', accessibleName: 'Show hidden activities',
@@ -47,9 +47,9 @@ export class PopupContent {
 
         // Clipped: while its height eases between two cards, the new one is
         // uncovered instead of squeezed.
-        this._cardBin = new St.Bin({style_class: 'nowbar-card-bin', x_expand: true, clip_to_allocation: true});
+        this._cardBin = new St.Bin({style_class: 'nowpill-card-bin', x_expand: true, clip_to_allocation: true});
         this.actor.add_child(this._cardBin);
-        this._empty = label('Nothing going on right now', 'nowbar-empty', {x_align: Clutter.ActorAlign.CENTER});
+        this._empty = label('Nothing going on right now', 'nowpill-empty', {x_align: Clutter.ActorAlign.CENTER});
         this.actor.add_child(this._empty);
         if (ctx.locked)
             this.actor.add_child(nav);
@@ -74,7 +74,7 @@ export class PopupContent {
             this._dotsKey = list.map(a => a.id).join();
             this._dots.destroy_all_children();
             for (const a of list) {
-                const dot = new St.Button({style_class: 'nowbar-dot', can_focus: false, accessible_name: a.title,
+                const dot = new St.Button({style_class: 'nowpill-dot', can_focus: false, accessible_name: a.title,
                     y_align: Clutter.ActorAlign.CENTER});
                 dot.connect('clicked', () => {
                     // The card slides in from the dot's side.

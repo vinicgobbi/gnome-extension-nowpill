@@ -4,7 +4,7 @@
 //
 //   gjs -m tests/model.test.js
 
-import * as Model from '../nowbar@vinicgobbi.dev.br/lib/model.js';
+import * as Model from '../nowpill@vinicgobbi.dev.br/lib/model.js';
 
 let failed = 0;
 function check(name, ok) {

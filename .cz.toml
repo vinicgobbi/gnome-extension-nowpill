@@ -1,11 +1,19 @@
 [tool.commitizen]
 name = "cz_conventional_commits"
 version_provider = "commitizen"
+# Extensões do GNOME têm versão inteira, como a que o extensions.gnome.org
+# dá a cada envio: as releases são v1, v2... e o "version-name" do
+# metadata.json acompanha (o "version" é depreciado, o site o define). O
+# commitizen só decide se há release (algum feat/fix/BREAKING desde a
+# última); o workflow passa a próxima como N.0.0 e a tag fica vN. A v0.2.0,
+# de antes disso, segue reconhecida pelo formato antigo.
 version = "0.2.0"
-tag_format = "v$version"
-# O "version-name" do metadata.json acompanha a versão (o "version" inteiro
-# é dado pelo extensions.gnome.org a cada envio).
-version_files = ["nowbar@vinicgobbi.dev.br/metadata.json:version-name"]
-update_changelog_on_bump = true
+tag_format = "v$major"
+legacy_tag_formats = ["v$version"]
 changelog_file = "CHANGELOG.md"
-major_version_zero = true
+# O changelog é gerado inteiro a cada bump: o incremental se perde entre a
+# v0.2.0 e as tags inteiras e duplica seções.
+pre_bump_hooks = [
+  "sed -i -E \"s/(\\\"version-name\\\": \\\")[^\\\"]*/\\\\1${CZ_PRE_NEW_VERSION%%.*}/\" nowpill@vinicgobbi.dev.br/metadata.json",
+  "cz changelog --unreleased-version \"v${CZ_PRE_NEW_VERSION%%.*}\"",
+]

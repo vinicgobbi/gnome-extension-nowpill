@@ -111,7 +111,7 @@ export class ArtSource extends EventEmitter {
             this._pending.add(safe);
             this._load(safe).then(entry => this._store(safe, entry)).catch(e => {
                 if (!e.matches?.(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED)) {
-                    console.debug(`Now Bar: cover ${safe}: ${e.message}`);
+                    console.debug(`Now Pill: cover ${safe}: ${e.message}`);
                     this._store(safe, {failed: true, retryAt: Date.now() + RETRY_MS});
                 }
             }).finally(() => this._pending.delete(safe));

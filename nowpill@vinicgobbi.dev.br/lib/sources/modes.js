@@ -3,7 +3,7 @@ import Gio from 'gi://Gio';
 import {EventEmitter} from 'resource:///org/gnome/shell/misc/signals.js';
 
 // Do Not Disturb and night light: GNOME's own settings, switched from its
-// Quick Settings. The Now Bar shows them while they are on, with a button
+// Quick Settings. The Now Pill shows them while they are on, with a button
 // to turn them off.
 //   - Do Not Disturb is org.gnome.desktop.notifications show-banners (off).
 //   - Night light is the color plugin's switch; it counts as on while the

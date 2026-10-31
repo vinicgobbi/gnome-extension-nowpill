@@ -44,16 +44,16 @@ export function label(text, styleClass, params = {}) {
 
 // A button with an icon and/or a label.
 export function button({icon, text, styleClass = '', accessibleName, onClick, iconSize}) {
-    const box = hbox({style_class: 'nowbar-btn-box', x_align: Clutter.ActorAlign.CENTER,
+    const box = hbox({style_class: 'nowpill-btn-box', x_align: Clutter.ActorAlign.CENTER,
         y_align: Clutter.ActorAlign.CENTER});
     if (icon) {
-        box.add_child(new St.Icon({icon_name: icon, style_class: 'nowbar-btn-icon',
+        box.add_child(new St.Icon({icon_name: icon, style_class: 'nowpill-btn-icon',
             ...(iconSize ? {icon_size: iconSize} : {})}));
     }
     if (text)
-        box.add_child(label(text, 'nowbar-btn-label'));
+        box.add_child(label(text, 'nowpill-btn-label'));
     const b = new St.Button({
-        style_class: `nowbar-btn ${styleClass}`,
+        style_class: `nowpill-btn ${styleClass}`,
         child: box,
         can_focus: true,
         accessible_name: accessibleName ?? text ?? '',
@@ -69,9 +69,9 @@ export function button({icon, text, styleClass = '', accessibleName, onClick, ic
 // every tick).
 export class Bar {
     constructor(styleClass) {
-        this.actor = new St.Widget({style_class: `nowbar-bar ${styleClass}`, x_expand: true,
+        this.actor = new St.Widget({style_class: `nowpill-bar ${styleClass}`, x_expand: true,
             layout_manager: new Clutter.BinLayout()});
-        this.fill = new St.Widget({style_class: 'nowbar-bar-fill', x_expand: true, y_expand: true,
+        this.fill = new St.Widget({style_class: 'nowpill-bar-fill', x_expand: true, y_expand: true,
             pivot_point: new Graphene.Point({x: 0, y: 0.5}), scale_x: 0});
         this.actor.add_child(this.fill);
         this._fraction = -1;
@@ -131,15 +131,14 @@ export function appFor(entry, name) {
     return null;
 }
 
-const iconTheme = new St.IconTheme();
-
 // The app's one-color icon from the theme ("<name>-symbolic"), if it ships
 // one.
 export function symbolicIcon(app) {
     const gicon = app?.get_icon();
     if (!(gicon instanceof Gio.ThemedIcon))
         return null;
-    const name = gicon.get_names().map(n => `${n}-symbolic`).find(n => iconTheme.has_icon(n));
+    const theme = new St.IconTheme();
+    const name = gicon.get_names().map(n => `${n}-symbolic`).find(n => theme.has_icon(n));
     return name ? new Gio.ThemedIcon({name}) : null;
 }
 
@@ -249,7 +248,7 @@ export class Marquee {
         this._once = once;
         this._layout = new MarqueeLayout();
         this._layout.fit = once;
-        this.actor = new St.Widget({style_class: 'nowbar-marquee', x_expand: !once, clip_to_allocation: true,
+        this.actor = new St.Widget({style_class: 'nowpill-marquee', x_expand: !once, clip_to_allocation: true,
             layout_manager: this._layout, ...(once ? {y_align: Clutter.ActorAlign.CENTER} : {})});
         this._strip = hbox({style: `spacing: ${MARQUEE_GAP}px;`});
         this._labels = [0, 1].map(() => {
@@ -565,7 +564,7 @@ class WaveSlider extends Slider.Slider {
 export const PillWave = GObject.registerClass(
 class PillWave extends St.DrawingArea {
     _init() {
-        super._init({style_class: 'nowbar-pill-wave', x_expand: true, y_expand: true});
+        super._init({style_class: 'nowpill-pill-wave', x_expand: true, y_expand: true});
         this._motion = new WaveMotion(this);
         this._color = null;
     }

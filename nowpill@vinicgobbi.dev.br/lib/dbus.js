@@ -1,17 +1,17 @@
 import Gio from 'gi://Gio';
 
-// The Now Bar on the session bus, for scripts and keyboard shortcuts: what
+// The Now Pill on the session bus, for scripts and keyboard shortcuts: what
 // `omarchy-shell nowbar <method>` does on Omarchy.
 //
-//   gdbus call --session --dest br.dev.vinicgobbi.NowBar \
-//     --object-path /br/dev/vinicgobbi/NowBar --method br.dev.vinicgobbi.NowBar.Next
+//   gdbus call --session --dest br.dev.vinicgobbi.NowPill \
+//     --object-path /br/dev/vinicgobbi/NowPill --method br.dev.vinicgobbi.NowPill.Next
 
-export const BUS_NAME = 'br.dev.vinicgobbi.NowBar';
-export const OBJECT_PATH = '/br/dev/vinicgobbi/NowBar';
+export const BUS_NAME = 'br.dev.vinicgobbi.NowPill';
+export const OBJECT_PATH = '/br/dev/vinicgobbi/NowPill';
 
 const Iface = `
 <node>
-  <interface name="br.dev.vinicgobbi.NowBar">
+  <interface name="br.dev.vinicgobbi.NowPill">
     <method name="Next"><arg type="b" direction="out"/></method>
     <method name="Prev"><arg type="b" direction="out"/></method>
     <method name="Toggle"/>
@@ -36,7 +36,7 @@ const Iface = `
   </interface>
 </node>`;
 
-export class NowbarDBus {
+export class NowpillDBus {
     // `ui` = {togglePopup(), openPopupOn(id), openPreferences()}
     constructor(service, ui) {
         this._service = service;
@@ -44,7 +44,7 @@ export class NowbarDBus {
         this._impl = Gio.DBusExportedObject.wrapJSObject(Iface, this);
         this._impl.export(Gio.DBus.session, OBJECT_PATH);
         this._ownerId = Gio.bus_own_name(Gio.BusType.SESSION, BUS_NAME, Gio.BusNameOwnerFlags.NONE,
-            null, null, () => console.warn(`Now Bar: could not own ${BUS_NAME}`));
+            null, null, () => console.warn(`Now Pill: could not own ${BUS_NAME}`));
     }
 
     Next() {

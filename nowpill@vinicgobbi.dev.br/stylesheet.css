@@ -1,117 +1,117 @@
 /* --- the pill ------------------------------------------------------------ */
 
-.nowbar-button {
+.nowpill-button {
   -natural-hpadding: 4px;
   -minimum-hpadding: 2px;
 }
 
-.nowbar-pill {
+.nowpill-pill {
   border-radius: 99px;
   padding: 2px 10px;
   background-color: rgba(255, 255, 255, 0.08);
   transition-duration: 200ms;
 }
 
-.nowbar-button:hover .nowbar-pill,
-.nowbar-button:active .nowbar-pill,
-.nowbar-button:checked .nowbar-pill {
+.nowpill-button:hover .nowpill-pill,
+.nowpill-button:active .nowpill-pill,
+.nowpill-button:checked .nowpill-pill {
   background-color: rgba(255, 255, 255, 0.16);
 }
 
-.nowbar-pill.idle {
+.nowpill-pill.idle {
   padding: 2px 6px;
 }
 
-.nowbar-pill.urgent {
+.nowpill-pill.urgent {
   background-color: #c01c28;
   color: #ffffff;
 }
 
-.nowbar-pill.charging {
+.nowpill-pill.charging {
   background-gradient-direction: horizontal;
   background-gradient-start: rgba(53, 132, 228, 0.45);
   background-gradient-end: rgba(46, 194, 126, 0.45);
 }
 
-.nowbar-pill.paused .nowbar-icon,
-.nowbar-pill.paused .nowbar-label {
+.nowpill-pill.paused .nowpill-icon,
+.nowpill-pill.paused .nowpill-label {
   color: rgba(255, 255, 255, 0.6);
 }
 
-.nowbar-row {
+.nowpill-row {
   spacing: 6px;
 }
 
 /* The icon and the equalizer share one 16px slot: playing or paused, the
    text doesn't move. */
-.nowbar-icon {
+.nowpill-icon {
   icon-size: 16px;
   width: 16px;
   padding: 0;
   margin: 0;
 }
 
-.nowbar-label {
+.nowpill-label {
   font-weight: bold;
 }
 
-.nowbar-count {
+.nowpill-count {
   font-size: 0.8em;
   color: rgba(255, 255, 255, 0.6);
   font-feature-settings: "tnum";
 }
 
-.nowbar-bar-fill {
+.nowpill-bar-fill {
   border-radius: 1px;
   background-color: -st-accent-color;
 }
 
 /* On a light top bar (Adwaita in light mode): dark tints instead. */
-.nowbar-pill.on-light {
+.nowpill-pill.on-light {
   background-color: rgba(0, 0, 0, 0.07);
 }
 
-.nowbar-button:hover .nowbar-pill.on-light,
-.nowbar-button:active .nowbar-pill.on-light,
-.nowbar-button:checked .nowbar-pill.on-light {
+.nowpill-button:hover .nowpill-pill.on-light,
+.nowpill-button:active .nowpill-pill.on-light,
+.nowpill-button:checked .nowpill-pill.on-light {
   background-color: rgba(0, 0, 0, 0.14);
 }
 
-.nowbar-pill.on-light .nowbar-count,
-.nowbar-pill.on-light.paused .nowbar-icon,
-.nowbar-pill.on-light.paused .nowbar-label {
+.nowpill-pill.on-light .nowpill-count,
+.nowpill-pill.on-light.paused .nowpill-icon,
+.nowpill-pill.on-light.paused .nowpill-label {
   color: rgba(0, 0, 0, 0.55);
 }
 
 /* Music: the pill in the cover's color (set by the indicator, with the
    text color that reads on it), with no progress line. Faded text in white
    on a dark color, in black on a light one (.tint-light). */
-.nowbar-pill.tinted .nowbar-count,
-.nowbar-pill.tinted.paused .nowbar-icon,
-.nowbar-pill.tinted.paused .nowbar-label {
+.nowpill-pill.tinted .nowpill-count,
+.nowpill-pill.tinted.paused .nowpill-icon,
+.nowpill-pill.tinted.paused .nowpill-label {
   color: rgba(255, 255, 255, 0.72);
 }
 
-.nowbar-pill.tinted.tint-light .nowbar-count,
-.nowbar-pill.tinted.tint-light.paused .nowbar-icon,
-.nowbar-pill.tinted.tint-light.paused .nowbar-label {
+.nowpill-pill.tinted.tint-light .nowpill-count,
+.nowpill-pill.tinted.tint-light.paused .nowpill-icon,
+.nowpill-pill.tinted.tint-light.paused .nowpill-label {
   color: rgba(0, 0, 0, 0.6);
 }
 
 /* Urgent stays red over every tint above, hovered or not. */
-.nowbar-button .nowbar-pill.urgent,
-.nowbar-button:hover .nowbar-pill.urgent,
-.nowbar-button:active .nowbar-pill.urgent,
-.nowbar-button:checked .nowbar-pill.urgent {
+.nowpill-button .nowpill-pill.urgent,
+.nowpill-button:hover .nowpill-pill.urgent,
+.nowpill-button:active .nowpill-pill.urgent,
+.nowpill-button:checked .nowpill-pill.urgent {
   background-color: #c01c28;
   color: #ffffff;
 }
 
-.nowbar-button:hover .nowbar-pill.urgent {
+.nowpill-button:hover .nowpill-pill.urgent {
   background-color: #d02a36;
 }
 
-.nowbar-button .nowbar-pill.urgent .nowbar-count {
+.nowpill-button .nowpill-pill.urgent .nowpill-count {
   color: rgba(255, 255, 255, 0.75);
 }
 
@@ -121,16 +121,16 @@
    and on dark glass. Open, the card sits on the wallpaper too, with no frame:
    the popup's content, white on both shell themes (see
    tools/gen-light-css.sh). */
-.nowbar-lock-box {
+.nowpill-lock-box {
   margin-top: 48px;
 }
 
-.nowbar-lock-button {
+.nowpill-lock-button {
   border-radius: 99px;
 }
 
 /* The padding is the row's: the wave behind it reaches the pill's edges. */
-.nowbar-lock-pill {
+.nowpill-lock-pill {
   min-height: 48px;
   padding: 0;
   font-size: 1.15em;
@@ -138,48 +138,48 @@
   background-color: rgba(0, 0, 0, 0.4);
 }
 
-.nowbar-lock-pill .nowbar-row {
+.nowpill-lock-pill .nowpill-row {
   spacing: 10px;
   padding: 0 22px;
 }
 
-.nowbar-lock-pill.idle .nowbar-row {
+.nowpill-lock-pill.idle .nowpill-row {
   padding: 0 14px;
 }
 
-.nowbar-lock-button:hover .nowbar-lock-pill,
-.nowbar-lock-button:active .nowbar-lock-pill {
+.nowpill-lock-button:hover .nowpill-lock-pill,
+.nowpill-lock-button:active .nowpill-lock-pill {
   background-color: rgba(40, 40, 40, 0.6);
 }
 
-.nowbar-lock-button .nowbar-lock-pill.urgent {
+.nowpill-lock-button .nowpill-lock-pill.urgent {
   background-color: #c01c28;
 }
 
-.nowbar-lock-button:hover .nowbar-lock-pill.urgent {
+.nowpill-lock-button:hover .nowpill-lock-pill.urgent {
   background-color: #d02a36;
 }
 
-.nowbar-lock-pill .nowbar-icon {
+.nowpill-lock-pill .nowpill-icon {
   icon-size: 20px;
   width: 20px;
 }
 
-.nowbar-lock-view {
+.nowpill-lock-view {
   color: #ffffff;
 }
 
 /* The lock screen's "click to unlock" under the shrunk clock. */
-.nowbar-lock-hidden {
+.nowpill-lock-hidden {
   color: transparent;
 }
 
-.nowbar-lock .nowbar-lock-view .nowbar-popup {
+.nowpill-lock .nowpill-lock-view .nowpill-popup {
   width: 400px;
   spacing: 14px;
 }
 
-.nowbar-lock .nowbar-lock-view .nowbar-card {
+.nowpill-lock .nowpill-lock-view .nowpill-card {
   padding: 18px;
   border-radius: 28px;
   background-color: rgba(0, 0, 0, 0.35);
@@ -187,301 +187,301 @@
 
 /* Music: the cover is the card, the title over its bottom; the seek bar
    and the controls under it. */
-.nowbar-lock .nowbar-lock-media {
+.nowpill-lock .nowpill-lock-media {
   spacing: 12px;
 }
 
-.nowbar-lock .nowbar-lock-view .nowbar-lock-cover {
+.nowpill-lock .nowpill-lock-view .nowpill-lock-cover {
   height: 240px;
   padding: 0;
 }
 
-.nowbar-lock .nowbar-lock-cover .nowbar-media-bg,
-.nowbar-lock .nowbar-lock-cover .nowbar-media-scrim {
+.nowpill-lock .nowpill-lock-cover .nowpill-media-bg,
+.nowpill-lock .nowpill-lock-cover .nowpill-media-scrim {
   border-radius: 28px;
 }
 
-.nowbar-lock .nowbar-lock-cover .nowbar-media-scrim {
+.nowpill-lock .nowpill-lock-cover .nowpill-media-scrim {
   background-gradient-start: rgba(0, 0, 0, 0.1);
   background-gradient-end: rgba(0, 0, 0, 0.7);
 }
 
-.nowbar-lock .nowbar-lock-cover .nowbar-media-body {
+.nowpill-lock .nowpill-lock-cover .nowpill-media-body {
   padding: 16px 20px 18px;
 }
 
-.nowbar-lock .nowbar-lock-cover .nowbar-media-line {
+.nowpill-lock .nowpill-lock-cover .nowpill-media-line {
   font-size: 1.4em;
   color: #ffffff;
 }
 
-.nowbar-lock .nowbar-lock-media .nowbar-seek-box {
+.nowpill-lock .nowpill-lock-media .nowpill-seek-box {
   padding: 0 10px;
 }
 
-.nowbar-lock .nowbar-lock-media .nowbar-media-controls {
+.nowpill-lock .nowpill-lock-media .nowpill-media-controls {
   spacing: 14px;
 }
 
 /* The popup's round buttons, bigger. */
-.nowbar-lock .nowbar-lock-media .nowbar-round.solid {
+.nowpill-lock .nowpill-lock-media .nowpill-round.solid {
   width: 64px;
   height: 64px;
   background-color: rgba(255, 255, 255, 0.16);
 }
 
-.nowbar-lock .nowbar-lock-media .nowbar-round.solid:hover,
-.nowbar-lock .nowbar-lock-media .nowbar-round.solid:active {
+.nowpill-lock .nowpill-lock-media .nowpill-round.solid:hover,
+.nowpill-lock .nowpill-lock-media .nowpill-round.solid:active {
   background-color: rgba(255, 255, 255, 0.28);
 }
 
-.nowbar-lock .nowbar-lock-media .nowbar-round.solid .nowbar-btn-icon {
+.nowpill-lock .nowpill-lock-media .nowpill-round.solid .nowpill-btn-icon {
   icon-size: 26px;
 }
 
-.nowbar-lock .nowbar-lock-media .nowbar-round.small {
+.nowpill-lock .nowpill-lock-media .nowpill-round.small {
   width: 44px;
   height: 44px;
 }
 
-.nowbar-lock .nowbar-lock-media .nowbar-round.small:hover,
-.nowbar-lock .nowbar-lock-media .nowbar-round.small:checked {
+.nowpill-lock .nowpill-lock-media .nowpill-round.small:hover,
+.nowpill-lock .nowpill-lock-media .nowpill-round.small:checked {
   background-color: rgba(255, 255, 255, 0.18);
 }
 
-.nowbar-lock .nowbar-nav.below {
+.nowpill-lock .nowpill-nav.below {
   padding-top: 2px;
 }
 
 /* --- the popup ------------------------------------------------------------ */
 
-.nowbar-menu {
+.nowpill-menu {
   padding: 8px;
 }
 
-.nowbar-popup {
+.nowpill-popup {
   width: 360px;
   spacing: 8px;
 }
 
-.nowbar-nav {
+.nowpill-nav {
   spacing: 4px;
 }
 
-.nowbar-dots {
+.nowpill-dots {
   spacing: 6px;
 }
 
-.nowbar-dot {
+.nowpill-dot {
   width: 7px;
   height: 7px;
   border-radius: 99px;
   background-color: rgba(255, 255, 255, 0.25);
 }
 
-.nowbar-dot:checked {
+.nowpill-dot:checked {
   width: 18px;
   background-color: -st-accent-color;
 }
 
-.nowbar-empty {
+.nowpill-empty {
   padding: 24px 0;
   color: rgba(255, 255, 255, 0.6);
 }
 
-.nowbar-card {
+.nowpill-card {
   spacing: 10px;
   padding: 14px;
   border-radius: 18px;
   background-color: rgba(255, 255, 255, 0.06);
 }
 
-.nowbar-card.urgent,
-.nowbar-popup.urgent .nowbar-card {
+.nowpill-card.urgent,
+.nowpill-popup.urgent .nowpill-card {
   background-color: rgba(192, 28, 40, 0.35);
 }
 
-.nowbar-card-head {
+.nowpill-card-head {
   spacing: 12px;
 }
 
-.nowbar-card-icon-bin {
+.nowpill-card-icon-bin {
   width: 42px;
   height: 42px;
   border-radius: 99px;
   background-color: rgba(255, 255, 255, 0.12);
 }
 
-.nowbar-card-icon {
+.nowpill-card-icon {
   icon-size: 22px;
 }
 
-.nowbar-card-title {
+.nowpill-card-title {
   font-size: 1.15em;
   font-weight: bold;
 }
 
-.nowbar-card-subtitle {
+.nowpill-card-subtitle {
   color: rgba(255, 255, 255, 0.75);
 }
 
-.nowbar-card-detail {
+.nowpill-card-detail {
   font-size: 0.9em;
   color: rgba(255, 255, 255, 0.6);
 }
 
-.nowbar-card-progress {
+.nowpill-card-progress {
   height: 6px;
   border-radius: 3px;
   background-color: rgba(255, 255, 255, 0.12);
 }
 
-.nowbar-card-progress .nowbar-bar-fill {
+.nowpill-card-progress .nowpill-bar-fill {
   border-radius: 3px;
 }
 
-.nowbar-card-details {
+.nowpill-card-details {
   spacing: 2px;
 }
 
-.nowbar-card-actions {
+.nowpill-card-actions {
   spacing: 6px;
 }
 
 /* buttons */
 
-.nowbar-btn {
+.nowpill-btn {
   padding: 6px 12px;
   border-radius: 99px;
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-.nowbar-btn:hover,
-.nowbar-btn:focus {
+.nowpill-btn:hover,
+.nowpill-btn:focus {
   background-color: rgba(255, 255, 255, 0.18);
 }
 
-.nowbar-btn:active {
+.nowpill-btn:active {
   background-color: rgba(255, 255, 255, 0.24);
 }
 
-.nowbar-btn.flat {
+.nowpill-btn.flat {
   background-color: transparent;
   padding: 6px 8px;
 }
 
-.nowbar-btn.flat:hover,
-.nowbar-btn.flat:focus {
+.nowpill-btn.flat:hover,
+.nowpill-btn.flat:focus {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-.nowbar-btn.primary {
+.nowpill-btn.primary {
   background-color: -st-accent-color;
   color: -st-accent-fg-color;
 }
 
-.nowbar-btn-box {
+.nowpill-btn-box {
   spacing: 6px;
 }
 
-.nowbar-btn-icon {
+.nowpill-btn-icon {
   icon-size: 16px;
 }
 
-.nowbar-round:checked {
+.nowpill-round:checked {
   background-color: -st-accent-color;
   color: -st-accent-fg-color;
 }
 
 /* --- media --------------------------------------------------------------- */
 
-.nowbar-media {
+.nowpill-media {
   padding: 0;
 }
 
 /* The cover over the whole card, and a veil that darkens it more toward
    the controls. */
-.nowbar-media-bg,
-.nowbar-media-scrim {
+.nowpill-media-bg,
+.nowpill-media-scrim {
   border-radius: 18px;
 }
 
-.nowbar-media-scrim {
+.nowpill-media-scrim {
   background-gradient-direction: vertical;
   background-gradient-start: rgba(0, 0, 0, 0.35);
   background-gradient-end: rgba(0, 0, 0, 0.72);
 }
 
-.nowbar-media-body {
+.nowpill-media-body {
   spacing: 10px;
   padding: 12px 16px 14px;
 }
 
 /* Where the sound comes from: app icon, name, and a chevron when it opens. */
-.nowbar-media-source {
+.nowpill-media-source {
   border-radius: 99px;
   padding: 3px 8px 3px 4px;
 }
 
-.nowbar-media-source:hover,
-.nowbar-media-source:focus {
+.nowpill-media-source:hover,
+.nowpill-media-source:focus {
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-.nowbar-media-source-box {
+.nowpill-media-source-box {
   spacing: 6px;
 }
 
-.nowbar-media-app-icon {
+.nowpill-media-app-icon {
   icon-size: 16px;
 }
 
-.nowbar-media-source-label {
+.nowpill-media-source-label {
   font-size: 0.85em;
   font-weight: bold;
   color: rgba(255, 255, 255, 0.75);
 }
 
-.nowbar-media-source-open {
+.nowpill-media-source-open {
   icon-size: 12px;
   color: rgba(255, 255, 255, 0.5);
 }
 
 /* "Title • artist", scrolling when it doesn't fit. */
-.nowbar-media-line {
+.nowpill-media-line {
   font-size: 1.1em;
 }
 
-.nowbar-seek {
+.nowpill-seek {
   -barlevel-height: 5px;
   -slider-handle-radius: 9px;
 }
 
-.nowbar-seek-box {
+.nowpill-seek-box {
   spacing: 2px;
 }
 
-.nowbar-times {
+.nowpill-times {
   padding: 0 2px;
 }
 
-.nowbar-time {
+.nowpill-time {
   font-size: 0.8em;
   font-feature-settings: "tnum";
   color: rgba(255, 255, 255, 0.6);
 }
 
-.nowbar-volume-row {
+.nowpill-volume-row {
   spacing: 10px;
   padding: 0 4px;
 }
 
-.nowbar-media-controls {
+.nowpill-media-controls {
   spacing: 8px;
 }
 
 /* Fixed sizes and no padding: circles, whatever the icon. */
-.nowbar-round {
+.nowpill-round {
   border-radius: 99px;
   padding: 0;
   width: 44px;
@@ -489,47 +489,47 @@
   background-color: transparent;
 }
 
-.nowbar-round:hover,
-.nowbar-round:focus {
+.nowpill-round:hover,
+.nowpill-round:focus {
   background-color: rgba(255, 255, 255, 0.12);
 }
 
-.nowbar-round .nowbar-btn-icon {
+.nowpill-round .nowpill-btn-icon {
   icon-size: 20px;
 }
 
-.nowbar-round.small {
+.nowpill-round.small {
   width: 36px;
   height: 36px;
 }
 
-.nowbar-round.small .nowbar-btn-icon {
+.nowpill-round.small .nowpill-btn-icon {
   icon-size: 16px;
 }
 
 /* Shuffle / repeat on: tinted (with the cover's color, set by the card). */
-.nowbar-round.small:checked {
+.nowpill-round.small:checked {
   background-color: rgba(255, 255, 255, 0.12);
   color: -st-accent-color;
 }
 
 /* Previous, play and next: the same translucent circles. */
-.nowbar-round.solid {
+.nowpill-round.solid {
   width: 50px;
   height: 50px;
   background-color: rgba(255, 255, 255, 0.1);
 }
 
-.nowbar-round.solid:hover,
-.nowbar-round.solid:focus {
+.nowpill-round.solid:hover,
+.nowpill-round.solid:focus {
   background-color: rgba(255, 255, 255, 0.2);
 }
 
-.nowbar-round.solid .nowbar-btn-icon {
+.nowpill-round.solid .nowpill-btn-icon {
   icon-size: 22px;
 }
 
-.nowbar-volume-icon {
+.nowpill-volume-icon {
   icon-size: 16px;
   color: rgba(255, 255, 255, 0.7);
 }
@@ -538,41 +538,41 @@
    White on the darkened cover in light and dark shells alike:
    tools/gen-light-css.sh leaves this section as it is. */
 
-.nowbar-media.has-cover,
-.nowbar-media.has-cover .nowbar-media-line,
-.nowbar-media.has-cover .nowbar-btn-icon,
-.nowbar-media.has-cover .nowbar-media-app-icon {
+.nowpill-media.has-cover,
+.nowpill-media.has-cover .nowpill-media-line,
+.nowpill-media.has-cover .nowpill-btn-icon,
+.nowpill-media.has-cover .nowpill-media-app-icon {
   color: #ffffff;
 }
 
-.nowbar-media.has-cover .nowbar-media-source-label {
+.nowpill-media.has-cover .nowpill-media-source-label {
   color: rgba(255, 255, 255, 0.85);
 }
 
-.nowbar-media.has-cover .nowbar-media-source-open,
-.nowbar-media.has-cover .nowbar-time,
-.nowbar-media.has-cover .nowbar-volume-icon {
+.nowpill-media.has-cover .nowpill-media-source-open,
+.nowpill-media.has-cover .nowpill-time,
+.nowpill-media.has-cover .nowpill-volume-icon {
   color: rgba(255, 255, 255, 0.7);
 }
 
-.nowbar-media.has-cover .nowbar-media-source:hover,
-.nowbar-media.has-cover .nowbar-media-source:focus,
-.nowbar-media.has-cover .nowbar-round:hover,
-.nowbar-media.has-cover .nowbar-round:focus,
-.nowbar-media.has-cover .nowbar-round.small:checked {
+.nowpill-media.has-cover .nowpill-media-source:hover,
+.nowpill-media.has-cover .nowpill-media-source:focus,
+.nowpill-media.has-cover .nowpill-round:hover,
+.nowpill-media.has-cover .nowpill-round:focus,
+.nowpill-media.has-cover .nowpill-round.small:checked {
   background-color: rgba(255, 255, 255, 0.18);
 }
 
-.nowbar-media.has-cover .nowbar-round.solid {
+.nowpill-media.has-cover .nowpill-round.solid {
   background-color: rgba(255, 255, 255, 0.16);
 }
 
-.nowbar-media.has-cover .nowbar-round.solid:hover,
-.nowbar-media.has-cover .nowbar-round.solid:focus {
+.nowpill-media.has-cover .nowpill-round.solid:hover,
+.nowpill-media.has-cover .nowpill-round.solid:focus {
   background-color: rgba(255, 255, 255, 0.26);
 }
 
-.nowbar-media.has-cover .nowbar-slider {
+.nowpill-media.has-cover .nowpill-slider {
   -barlevel-background-color: rgba(255, 255, 255, 0.28);
 }
 
@@ -580,77 +580,77 @@
 
 /* --- weather ------------------------------------------------------------- */
 
-.nowbar-weather-icon {
+.nowpill-weather-icon {
   icon-size: 48px;
 }
 
-.nowbar-weather-temp {
+.nowpill-weather-temp {
   font-size: 2em;
   font-weight: 300;
 }
 
-.nowbar-place {
+.nowpill-place {
   font-weight: bold;
 }
 
-.nowbar-weather-facts {
+.nowpill-weather-facts {
   spacing: 14px;
 }
 
-.nowbar-fact {
+.nowpill-fact {
   spacing: 4px;
 }
 
-.nowbar-fact-icon {
+.nowpill-fact-icon {
   icon-size: 14px;
 }
 
-.nowbar-weather-hours {
+.nowpill-weather-hours {
   spacing: 4px;
   padding: 8px 0;
 }
 
-.nowbar-hour {
+.nowpill-hour {
   spacing: 4px;
 }
 
-.nowbar-hour-label {
+.nowpill-hour-label {
   font-size: 0.85em;
   color: rgba(255, 255, 255, 0.6);
 }
 
-.nowbar-hour-icon {
+.nowpill-hour-icon {
   icon-size: 18px;
 }
 
-.nowbar-weather-days {
+.nowpill-weather-days {
   spacing: 6px;
 }
 
-.nowbar-day {
+.nowpill-day {
   spacing: 8px;
 }
 
-.nowbar-day-name {
+.nowpill-day-name {
   min-width: 72px;
 }
 
-.nowbar-day-icon {
+.nowpill-day-icon {
   icon-size: 16px;
 }
 
-.nowbar-day-temp {
+.nowpill-day-temp {
   min-width: 32px;
   font-feature-settings: "tnum";
 }
 
-.nowbar-day-track {
+.nowpill-day-track {
   height: 5px;
   border-radius: 3px;
   background-color: rgba(255, 255, 255, 0.12);
 }
 
-.nowbar-day-fill {
+.nowpill-day-fill {
   height: 5px;
   border-radius: 3px;
   background-gradient-direction: horizontal;
@@ -658,19 +658,19 @@
   background-gradient-end: #f8e45c;
 }
 
-.nowbar-weather-rain {
+.nowpill-weather-rain {
   spacing: 8px;
   padding: 6px 12px;
   border-radius: 12px;
   background-color: rgba(61, 143, 224, 0.2);
 }
 
-.nowbar-weather-rain-icon {
+.nowpill-weather-rain-icon {
   icon-size: 16px;
   color: #62a0ea;
 }
 
-.nowbar-weather-rain-label {
+.nowpill-weather-rain-label {
   font-weight: bold;
 }
 

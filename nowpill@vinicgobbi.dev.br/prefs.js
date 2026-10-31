@@ -51,7 +51,7 @@ function comboRow(settings, key, title, choices, subtitle = '') {
 }
 
 // The players around now (from the session bus) and the ones already
-// hidden, each with a switch. A hidden player stays out of the Now Bar but
+// hidden, each with a switch. A hidden player stays out of the Now Pill but
 // still answers the media keys.
 function playersGroup(settings) {
     const group = new Adw.PreferencesGroup({
@@ -80,7 +80,7 @@ function playersGroup(settings) {
     for (const name of Model.parseIgnoredPlayers(settings.get_string('media-ignore')))
         addRow(name);
 
-    // Each MPRIS player's own name (Identity), the one the Now Bar matches.
+    // Each MPRIS player's own name (Identity), the one the Now Pill matches.
     const bus = Gio.DBus.session;
     bus.call('org.freedesktop.DBus', '/org/freedesktop/DBus', 'org.freedesktop.DBus', 'ListNames',
         null, null, Gio.DBusCallFlags.NONE, -1, null, (conn, res) => {
@@ -116,14 +116,14 @@ function playersGroup(settings) {
     return group;
 }
 
-export default class NowbarPreferences extends ExtensionPreferences {
+export default class NowpillPreferences extends ExtensionPreferences {
     fillPreferencesWindow(window) {
         const s = this.getSettings();
         window.set_default_size(640, 720);
 
         // --- Activities
         const activities = new Adw.PreferencesPage({title: 'Activities', icon_name: 'view-reveal-symbolic'});
-        const shown = new Adw.PreferencesGroup({title: 'Show in the Now Bar'});
+        const shown = new Adw.PreferencesGroup({title: 'Show in the Now Pill'});
         for (const [id, title, subtitle] of MODULES)
             shown.add(switchRow(s, `module-${id}`, title, subtitle));
         activities.add(shown);

@@ -1,23 +1,23 @@
 import {Extension} from 'resource:///org/gnome/shell/extensions/extension.js';
 import * as Main from 'resource:///org/gnome/shell/ui/main.js';
 
-import {NowbarService} from './lib/service.js';
-import {NowbarIndicator} from './lib/ui/indicator.js';
-import {LockScreenNowbar} from './lib/ui/lockscreen.js';
-import {NowbarDBus} from './lib/dbus.js';
+import {NowpillService} from './lib/service.js';
+import {NowpillIndicator} from './lib/ui/indicator.js';
+import {LockScreenNowpill} from './lib/ui/lockscreen.js';
+import {NowpillDBus} from './lib/dbus.js';
 import {destroySession} from './lib/net.js';
 
-const ROLE = 'nowbar';
+const ROLE = 'nowpill';
 
 // Enabled in the 'unlock-dialog' session mode too (metadata.json), for the
 // pill on the lock screen: locking doesn't disable the extension, so the
 // top bar's pill is taken down here while the session is locked and put
 // back when it is unlocked.
-export default class NowbarExtension extends Extension {
+export default class NowpillExtension extends Extension {
     enable() {
         this._settings = this.getSettings();
-        this._service = new NowbarService(this._settings);
-        this._dbus = new NowbarDBus(this._service, {
+        this._service = new NowpillService(this._settings);
+        this._dbus = new NowpillDBus(this._service, {
             togglePopup: () => this._indicator?.togglePopup(),
             openPopup: () => this._indicator?.openPopup(),
             openPreferences: () => {
@@ -39,7 +39,7 @@ export default class NowbarExtension extends Extension {
     }
 
     _addIndicator() {
-        this._indicator = new NowbarIndicator(this._service, () => this.openPreferences());
+        this._indicator = new NowpillIndicator(this._service, () => this.openPreferences());
         const box = this._settings.get_string('panel-box');
         Main.panel.addToStatusArea(ROLE, this._indicator, this._settings.get_int('panel-index'), box);
     }
@@ -58,10 +58,13 @@ export default class NowbarExtension extends Extension {
         const dialog = locked && this._settings.get_boolean('lock-screen') ? Main.screenShield?._dialog : null;
         if (locked && this._lock?.dialog !== dialog) {
             this._lock?.destroy();
-            this._lock = dialog ? new LockScreenNowbar(this._service, dialog, () => (this._lock = null)) : null;
+            this._lock = dialog ? new LockScreenNowpill(this._service, dialog, () => (this._lock = null)) : null;
         }
     }
 
+    // Also called when the session is unlocked and extensions are turned off
+    // there: 'unlock-dialog' is in session-modes only for the pill on the
+    // lock screen (see above), and nothing here is left behind while locked.
     disable() {
         Main.sessionMode.disconnectObject(this);
         this._settings.disconnect(this._lockId);

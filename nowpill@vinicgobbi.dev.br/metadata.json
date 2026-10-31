@@ -1,0 +1,10 @@
+{
+  "uuid": "nowpill@vinicgobbi.dev.br",
+  "name": "Now Pill",
+  "description": "A Samsung-style Now Bar for the top bar: one pill shows what is going on right now (music, a timer, a screen recording, the camera in use, charging, the weather...). Scroll over it to switch between activities, click it for the details and controls. A screenshot's card can copy the image to the clipboard (only when its Copy button is clicked).",
+  "shell-version": ["50"],
+  "session-modes": ["user", "unlock-dialog"],
+  "settings-schema": "org.gnome.shell.extensions.nowpill",
+  "url": "https://github.com/vinicgobbi/gnome-extension-nowpill",
+  "version-name": "0.2.0"
+}

@@ -29,7 +29,7 @@ function camel(key) {
     return key.replace(/-([a-z])/g, (m, c) => c.toUpperCase());
 }
 
-export class NowbarService extends EventEmitter {
+export class NowpillService extends EventEmitter {
     constructor(settings) {
         super();
         this._settings = settings;
@@ -221,7 +221,7 @@ export class NowbarService extends EventEmitter {
     push(id, json) {
         // Off in the options: nothing is kept (or ticks) for it.
         if (!this.prefs.modules.push)
-            return 'scripts are turned off in the Now Bar options';
+            return 'scripts are turned off in the Now Pill options';
         const r = Model.sanitizePush(id, json, Date.now());
         if (!r.ok)
             return r.error;

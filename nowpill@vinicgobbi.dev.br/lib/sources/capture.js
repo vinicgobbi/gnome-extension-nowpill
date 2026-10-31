@@ -82,7 +82,7 @@ export class CaptureSource extends EventEmitter {
     }
 
     startRecording() {
-        this._ui.open(1 /* UIMode.SCREENCAST */).catch(e => console.warn(`Now Bar: ${e.message}`));
+        this._ui.open(1 /* UIMode.SCREENCAST */).catch(e => console.warn(`Now Pill: ${e.message}`));
     }
 
     stopRecording() {
@@ -105,7 +105,7 @@ export function copyImage(path, St) {
         St.Clipboard.get_default().set_content(St.ClipboardType.CLIPBOARD, type, new GLib.Bytes(bytes));
         return true;
     } catch (e) {
-        console.warn(`Now Bar: copy ${path}: ${e.message}`);
+        console.warn(`Now Pill: copy ${path}: ${e.message}`);
         return false;
     }
 }

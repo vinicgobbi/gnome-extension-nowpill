@@ -46,7 +46,7 @@ export class PowerSource extends EventEmitter {
         this._proxies = [];
         this._init().catch(e => {
             if (!e.matches?.(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
-                console.debug(`Now Bar: UPower: ${e.message}`);
+                console.debug(`Now Pill: UPower: ${e.message}`);
         });
     }
 

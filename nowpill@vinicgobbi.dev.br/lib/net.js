@@ -11,7 +11,7 @@ const CHUNK = 64 * 1024;
 let session = null;
 
 function getSession() {
-    session ??= new Soup.Session({user_agent: 'gnome-extension-nowbar', timeout: 15});
+    session ??= new Soup.Session({user_agent: 'gnome-extension-nowpill', timeout: 15});
     return session;
 }
 

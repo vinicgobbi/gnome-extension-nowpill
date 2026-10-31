@@ -87,7 +87,7 @@ export class Pill {
         // content comes in from that side.
         this.direction = 0;
 
-        this.actor = new St.Widget({style_class: `nowbar-pill ${styleClass}`.trim(),
+        this.actor = new St.Widget({style_class: `nowpill-pill ${styleClass}`.trim(),
             layout_manager: new Clutter.BinLayout(), y_align: Clutter.ActorAlign.CENTER});
         if (wave) {
             this._wave = new PillWave();
@@ -95,15 +95,15 @@ export class Pill {
         }
         // Centered: while the pill eases to a new width, the content stays in
         // the middle instead of hugging the left edge.
-        const row = hbox({style_class: 'nowbar-row', x_align: Clutter.ActorAlign.CENTER,
+        const row = hbox({style_class: 'nowpill-row', x_align: Clutter.ActorAlign.CENTER,
             y_align: Clutter.ActorAlign.CENTER});
         this._row = row;
         // Not 'system-status-icon': themes pad that one.
-        this._icon = new St.Icon({style_class: 'nowbar-icon', icon_name: IDLE, y_align: Clutter.ActorAlign.CENTER});
+        this._icon = new St.Icon({style_class: 'nowpill-icon', icon_name: IDLE, y_align: Clutter.ActorAlign.CENTER});
         // Never cut with "...": a new song (or anything new) goes by whole
         // once, then rests on its start, faded where it's cut.
-        this._text = new Marquee('nowbar-label', {once: true});
-        this._count = label('', 'nowbar-count');
+        this._text = new Marquee('nowpill-label', {once: true});
+        this._count = label('', 'nowpill-count');
         row.add_child(this._icon);
         row.add_child(this._text.actor);
         row.add_child(this._count);

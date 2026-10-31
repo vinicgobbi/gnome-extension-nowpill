@@ -1,4 +1,4 @@
-UUID := nowbar@vinicgobbi.dev.br
+UUID := nowpill@vinicgobbi.dev.br
 SRC := $(UUID)
 DEST := $(HOME)/.local/share/gnome-shell/extensions/$(UUID)
 

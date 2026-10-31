@@ -8,11 +8,11 @@ import {Pill, ScrollStepper} from './pill.js';
 import {PopupContent} from './popup.js';
 import {vbox} from './widgets.js';
 
-// The Now Bar on the lock screen: a bigger pill at the top, in the middle
+// The Now Pill on the lock screen: a bigger pill at the top, in the middle
 // of the main monitor. A click opens it as on One UI's lock screen: the
 // clock shrinks up under the pill and the card takes the middle of the
 // screen, on the wallpaper, with the carousel's dots under it (the popup's
-// content, minus what opens apps: see NowbarService._lockSafe). Another
+// content, minus what opens apps: see NowpillService._lockSafe). Another
 // click on the pill, or the password prompt coming up, closes it. Scroll
 // over the pill or the card switches activities.
 //
@@ -33,7 +33,7 @@ const MIN_COVER = 200;
 // What a music card needs under its cover: seek bar, controls, dots.
 const UNDER_COVER = 200;
 
-export class LockScreenNowbar {
+export class LockScreenNowpill {
     // `onGone()`: the dialog it was in is gone, and it with it.
     constructor(service, dialog, onGone) {
         this._service = service;
@@ -43,16 +43,16 @@ export class LockScreenNowbar {
         // As big as the main monitor but not reactive: clicks around the
         // pill and the card reach the lock screen under it. Its children
         // are placed by hand, centered across.
-        this.actor = new St.Widget({style_class: 'nowbar-lock'});
+        this.actor = new St.Widget({style_class: 'nowpill-lock'});
         this.actor.add_constraint(new Layout.MonitorConstraint({primary: true}));
         const centered = actor => actor.add_constraint(new Clutter.AlignConstraint({source: this.actor,
             align_axis: Clutter.AlignAxis.X_AXIS, factor: 0.5}));
 
-        this._box = vbox({style_class: 'nowbar-lock-box'});
+        this._box = vbox({style_class: 'nowpill-lock-box'});
         centered(this._box);
-        this._pill = new Pill(service, {styleClass: 'nowbar-lock-pill', widthScale: 1.4, wave: true});
-        this._button = new St.Button({style_class: 'nowbar-lock-button', child: this._pill.actor,
-            accessible_name: 'Now Bar'});
+        this._pill = new Pill(service, {styleClass: 'nowpill-lock-pill', widthScale: 1.4, wave: true});
+        this._button = new St.Button({style_class: 'nowpill-lock-button', child: this._pill.actor,
+            accessible_name: 'Now Pill'});
         this._button.connect('clicked', () => this._setExpanded(!this._expanded));
         this._button.connect('notify::hover', () => this._syncLit());
         this._scroll = new ScrollStepper(delta => {
@@ -71,7 +71,7 @@ export class LockScreenNowbar {
             closeMenu: () => this._setExpanded(false),
         };
         this._content = new PopupContent(this._ctx);
-        this._view = new St.Bin({style_class: 'nowbar-lock-view', child: this._content.actor,
+        this._view = new St.Bin({style_class: 'nowpill-lock-view', child: this._content.actor,
             reactive: true, visible: false});
         centered(this._view);
         // Scrolling over the card switches, and isn't the lock screen's swipe.
@@ -202,9 +202,9 @@ export class LockScreenNowbar {
                 actor.set(props);
         }
         if (up)
-            clock._hint?.add_style_class_name('nowbar-lock-hidden');
+            clock._hint?.add_style_class_name('nowpill-lock-hidden');
         else
-            clock._hint?.remove_style_class_name('nowbar-lock-hidden');
+            clock._hint?.remove_style_class_name('nowpill-lock-hidden');
         return target + dateBottom * CLOCK_SCALE;
     }
 

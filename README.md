@@ -1,6 +1,6 @@
-# Now Bar for GNOME
+# Now Pill for GNOME
 
-A Samsung-style **Now Bar** for the GNOME top bar, ported from
+**Now Pill** brings a Samsung-style Now Bar to the GNOME top bar, ported from
 [omarchy-plugin-nowbar](https://github.com/vinicgobbi/omarchy-plugin-nowbar).
 One pill shows what is going on right now (music, a screen recording, the camera in use, charging, the weather). Scroll over it to switch
 between activities, and click it for the details and controls.
@@ -30,7 +30,7 @@ media keys).
 
 ```bash
 make install
-gnome-extensions enable nowbar@vinicgobbi.dev.br
+gnome-extensions enable nowpill@vinicgobbi.dev.br
 ```
 
 On Wayland, log out and back in after the first install so the shell finds
@@ -56,7 +56,7 @@ Popup keys: ←/→ (h/l) switch, Enter main action, ↑/↓ volume and `[` / `]
 seek on a media card, `x` hide, `u` show hidden, `c` options, `q`/Esc close.
 
 Switches like Do Not Disturb, night light or screen recording are left to
-GNOME's Quick Settings; when one is on, the Now Bar shows it as an activity
+GNOME's Quick Settings; when one is on, the Now Pill shows it as an activity
 (with a button to turn it off).
 
 ### Lock screen
@@ -69,21 +69,21 @@ Weather) is off until you unlock. Turn it off in Options → Look → Lock scree
 
 ## Scripts and shortcuts
 
-The extension answers on the session bus as `br.dev.vinicgobbi.NowBar`
-(object `/br/dev/vinicgobbi/NowBar`). With `gdbus`, which comes with GLib:
+The extension answers on the session bus as `br.dev.vinicgobbi.NowPill`
+(object `/br/dev/vinicgobbi/NowPill`). With `gdbus`, which comes with GLib:
 
 ```bash
-nowbar() {
-  gdbus call --session --dest br.dev.vinicgobbi.NowBar \
-    --object-path /br/dev/vinicgobbi/NowBar --method br.dev.vinicgobbi.NowBar."$@"
+nowpill() {
+  gdbus call --session --dest br.dev.vinicgobbi.NowPill \
+    --object-path /br/dev/vinicgobbi/NowPill --method br.dev.vinicgobbi.NowPill."$@"
 }
 
-nowbar Next                     # also Prev, Toggle, Primary, Dismiss, Unhide, Weather, Settings
-nowbar Focus media
-nowbar Act media next
-nowbar Push build '{"title":"Build #42","subtitle":"Compiling","progress":0.4,"pill":"Build 40%"}'
-nowbar Remove build
-nowbar Status
+nowpill Next                     # also Prev, Toggle, Primary, Dismiss, Unhide, Weather, Settings
+nowpill Focus media
+nowpill Act media next
+nowpill Push build '{"title":"Build #42","subtitle":"Compiling","progress":0.4,"pill":"Build 40%"}'
+nowpill Remove build
+nowpill Status
 ```
 
 Push fields are the same as on Omarchy: `title` (required), `subtitle`,
@@ -92,7 +92,7 @@ Push fields are the same as on Omarchy: `title` (required), `subtitle`,
 `elapsed`. Pushed activities are text only and gone after a restart.
 
 For keyboard shortcuts, add custom shortcuts in Settings → Keyboard running
-the `gdbus call` above (for example with `...NowBar.Toggle`).
+the `gdbus call` above (for example with `...NowPill.Toggle`).
 
 ## Development
 
@@ -102,10 +102,11 @@ the `gdbus call` above (for example with `...NowBar.Toggle`).
 - `make nested` runs a GNOME Shell in a window with the extension installed.
 - `make pack` builds the zip for extensions.gnome.org.
 
-Commits follow Conventional Commits. On each push to `main`, the release
-workflow picks the next version with commitizen (updating `CHANGELOG.md` and
-the `version-name` in `metadata.json`) and publishes the extension's zip as a
-GitHub release.
+Commits follow Conventional Commits. On each push to `main` with a `feat`,
+`fix` or breaking change since the last release, the release workflow raises
+the extension's version by one, as GNOME extensions do (`version-name` in
+`metadata.json`, release `vN`), updates `CHANGELOG.md` with commitizen and
+publishes `nowpill@vinicgobbi.dev.br.shell-extension.zip` as a GitHub release.
 
 ## License
 

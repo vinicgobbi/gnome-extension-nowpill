@@ -11,12 +11,12 @@ import {PopupContent} from './popup.js';
 // Left click opens the popup, scroll switches, middle click runs the main
 // action, right click hides the activity until it changes.
 
-export const NowbarIndicator = GObject.registerClass(
-class NowbarIndicator extends PanelMenu.Button {
+export const NowpillIndicator = GObject.registerClass(
+class NowpillIndicator extends PanelMenu.Button {
     _init(service, openPreferences) {
-        super._init(0.5, 'Now Bar', false);
+        super._init(0.5, 'Now Pill', false);
         this._service = service;
-        this.add_style_class_name('nowbar-button');
+        this.add_style_class_name('nowpill-button');
 
         // The panel button's own gesture opens the menu on any button; this
         // one tells them apart.
@@ -42,7 +42,7 @@ class NowbarIndicator extends PanelMenu.Button {
             },
         });
         this.menu.box.add_child(this._content.actor);
-        this.menu.box.add_style_class_name('nowbar-menu');
+        this.menu.box.add_style_class_name('nowpill-menu');
         this._lockMenuX();
         this.menu.connect('open-state-changed', (m, open) => {
             this._menuX = null;
@@ -142,7 +142,9 @@ class NowbarIndicator extends PanelMenu.Button {
         // Nothing to show: no pill, unless the options ask for the empty one.
         this.visible = !!a || s.prefs.whenEmpty === 'icon' || this.menu.isOpen;
         this._pill.show(a);
-        this.accessible_name = Model.tooltipLabel(a, s.focusIndex, s.activities.length);
+        // The shared model names it the Now Bar, as the Omarchy plugin.
+        this.accessible_name = a ? Model.tooltipLabel(a, s.focusIndex, s.activities.length)
+            : 'Now Pill · nothing going on';
         if (this.menu.isOpen)
             this._content.update();
     }

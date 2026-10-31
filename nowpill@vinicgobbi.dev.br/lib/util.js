@@ -2,7 +2,7 @@ import Gio from 'gi://Gio';
 import GLib from 'gi://GLib';
 
 export function cacheDir() {
-    return GLib.build_filenamev([GLib.get_user_cache_dir(), 'nowbar-gnome']);
+    return GLib.build_filenamev([GLib.get_user_cache_dir(), 'nowpill-gnome']);
 }
 
 export function launchUri(uri) {
@@ -10,7 +10,7 @@ export function launchUri(uri) {
         Gio.AppInfo.launch_default_for_uri(uri, global.create_app_launch_context(0, -1));
         return true;
     } catch (e) {
-        console.warn(`Now Bar: could not open ${uri}: ${e.message}`);
+        console.warn(`Now Pill: could not open ${uri}: ${e.message}`);
         return false;
     }
 }

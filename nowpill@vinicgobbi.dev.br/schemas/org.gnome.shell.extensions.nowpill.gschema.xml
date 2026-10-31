@@ -3,7 +3,7 @@
      lib/service.js turns "media-paused-minutes" into "mediaPausedMinutes" and hands
      them all to Model.normalizePrefs(). -->
 <schemalist>
-  <schema id="org.gnome.shell.extensions.nowbar" path="/org/gnome/shell/extensions/nowbar/">
+  <schema id="org.gnome.shell.extensions.nowpill" path="/org/gnome/shell/extensions/nowpill/">
 
     <!-- Activities -->
     <key name="module-media" type="b"><default>true</default><summary>Media players</summary></key>
@@ -16,7 +16,7 @@
     <key name="module-weather" type="b"><default>true</default><summary>Weather card</summary></key>
     <key name="auto-focus" type="b"><default>true</default><summary>A new activity takes the pill</summary></key>
     <key name="media-paused-minutes" type="i"><default>15</default><summary>Minutes a paused player keeps the pill (0: always)</summary></key>
-    <key name="media-ignore" type="s"><default>''</default><summary>Players kept out of the Now Bar, comma separated</summary></key>
+    <key name="media-ignore" type="s"><default>''</default><summary>Players kept out of the Now Pill, comma separated</summary></key>
 
     <!-- Look -->
     <key name="panel-box" type="s">

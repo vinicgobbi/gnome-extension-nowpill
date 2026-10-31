@@ -66,7 +66,7 @@ class Player extends EventEmitter {
         this._ready = false;
         this._init().catch(e => {
             if (!e.matches?.(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
-                console.debug(`Now Bar: MPRIS ${busName}: ${e.message}`);
+                console.debug(`Now Pill: MPRIS ${busName}: ${e.message}`);
         });
     }
 
@@ -340,7 +340,7 @@ export class MprisSource extends EventEmitter {
                     }
                 } catch (e) {
                     if (!e.matches(Gio.IOErrorEnum, Gio.IOErrorEnum.CANCELLED))
-                        console.warn(`Now Bar: listing MPRIS players: ${e.message}`);
+                        console.warn(`Now Pill: listing MPRIS players: ${e.message}`);
                 }
             });
     }

@@ -31,28 +31,28 @@ function runAction(ctx, a, action) {
 export class Card {
     constructor(ctx, a) {
         this._ctx = ctx;
-        this.actor = vbox({style_class: 'nowbar-card', x_expand: true});
+        this.actor = vbox({style_class: 'nowpill-card', x_expand: true});
 
-        const head = hbox({style_class: 'nowbar-card-head'});
-        this._iconBin = new St.Bin({style_class: 'nowbar-card-icon-bin', y_align: Clutter.ActorAlign.CENTER});
-        this._icon = new St.Icon({style_class: 'nowbar-card-icon'});
+        const head = hbox({style_class: 'nowpill-card-head'});
+        this._iconBin = new St.Bin({style_class: 'nowpill-card-icon-bin', y_align: Clutter.ActorAlign.CENTER});
+        this._icon = new St.Icon({style_class: 'nowpill-card-icon'});
         this._iconBin.set_child(this._icon);
         head.add_child(this._iconBin);
         const texts = vbox({x_expand: true, y_align: Clutter.ActorAlign.CENTER});
-        this._title = label('', 'nowbar-card-title');
-        this._subtitle = label('', 'nowbar-card-subtitle');
+        this._title = label('', 'nowpill-card-title');
+        this._subtitle = label('', 'nowpill-card-subtitle');
         texts.add_child(this._title);
         texts.add_child(this._subtitle);
         head.add_child(texts);
         this.actor.add_child(head);
 
-        this._image = new St.Widget({style_class: 'nowbar-card-image', x_align: Clutter.ActorAlign.CENTER});
+        this._image = new St.Widget({style_class: 'nowpill-card-image', x_align: Clutter.ActorAlign.CENTER});
         this.actor.add_child(this._image);
-        this._bar = new Bar('nowbar-card-progress');
+        this._bar = new Bar('nowpill-card-progress');
         this.actor.add_child(this._bar.actor);
-        this._details = vbox({style_class: 'nowbar-card-details'});
+        this._details = vbox({style_class: 'nowpill-card-details'});
         this.actor.add_child(this._details);
-        this._actions = hbox({style_class: 'nowbar-card-actions', x_align: Clutter.ActorAlign.CENTER});
+        this._actions = hbox({style_class: 'nowpill-card-actions', x_align: Clutter.ActorAlign.CENTER});
         this.actor.add_child(this._actions);
         this._actionsKey = null;
         this.update(a);
@@ -80,7 +80,7 @@ export class Card {
             this._detailsKey = details;
             this._details.destroy_all_children();
             for (const d of a.details)
-                this._details.add_child(label(d, 'nowbar-card-detail'));
+                this._details.add_child(label(d, 'nowpill-card-detail'));
         }
         this._details.visible = a.details.length > 0;
 
@@ -134,11 +134,11 @@ export class MediaCard {
     // plays) and the controls.
     constructor(ctx, a) {
         this._ctx = ctx;
-        this.actor = new St.Widget({style_class: 'nowbar-card nowbar-media', x_expand: true,
+        this.actor = new St.Widget({style_class: 'nowpill-card nowpill-media', x_expand: true,
             layout_manager: new Clutter.BinLayout()});
-        this._bg = new St.Widget({style_class: 'nowbar-media-bg', x_expand: true, y_expand: true, visible: false});
-        this._scrim = new St.Widget({style_class: 'nowbar-media-scrim', x_expand: true, y_expand: true, visible: false});
-        const body = vbox({style_class: 'nowbar-media-body', x_expand: true});
+        this._bg = new St.Widget({style_class: 'nowpill-media-bg', x_expand: true, y_expand: true, visible: false});
+        this._scrim = new St.Widget({style_class: 'nowpill-media-scrim', x_expand: true, y_expand: true, visible: false});
+        const body = vbox({style_class: 'nowpill-media-body', x_expand: true});
         this.actor.add_child(this._bg);
         this.actor.add_child(this._scrim);
         this.actor.add_child(body);
@@ -148,12 +148,12 @@ export class MediaCard {
         this._surface = this.actor;
 
         // Where the sound comes from; a click opens the player.
-        this._source = new St.Button({style_class: 'nowbar-media-source', x_align: Clutter.ActorAlign.START,
+        this._source = new St.Button({style_class: 'nowpill-media-source', x_align: Clutter.ActorAlign.START,
             can_focus: true});
-        const sourceBox = hbox({style_class: 'nowbar-media-source-box'});
-        this._appIcon = new St.Icon({style_class: 'nowbar-media-app-icon', fallback_icon_name: 'audio-x-generic-symbolic'});
-        this._sourceLabel = label('', 'nowbar-media-source-label');
-        this._sourceOpen = new St.Icon({icon_name: 'go-next-symbolic', style_class: 'nowbar-media-source-open'});
+        const sourceBox = hbox({style_class: 'nowpill-media-source-box'});
+        this._appIcon = new St.Icon({style_class: 'nowpill-media-app-icon', fallback_icon_name: 'audio-x-generic-symbolic'});
+        this._sourceLabel = label('', 'nowpill-media-source-label');
+        this._sourceOpen = new St.Icon({icon_name: 'go-next-symbolic', style_class: 'nowpill-media-source-open'});
         sourceBox.add_child(this._appIcon);
         sourceBox.add_child(this._sourceLabel);
         sourceBox.add_child(this._sourceOpen);
@@ -161,18 +161,18 @@ export class MediaCard {
         this._source.connect('clicked', () => this._raise());
         body.add_child(this._source);
 
-        this._line = new Marquee('nowbar-media-line');
+        this._line = new Marquee('nowpill-media-line');
         body.add_child(this._line.actor);
 
         // Seek bar, with the elapsed and remaining time under its ends.
-        this._seekBox = vbox({style_class: 'nowbar-seek-box'});
+        this._seekBox = vbox({style_class: 'nowpill-seek-box'});
         this._seek = new WaveSlider(0);
         this._seek.x_expand = true;
-        this._seek.add_style_class_name('nowbar-slider');
-        this._seek.add_style_class_name('nowbar-seek');
-        const times = hbox({style_class: 'nowbar-times'});
-        this._elapsed = label('', 'nowbar-time', {x_expand: true});
-        this._remaining = label('', 'nowbar-time');
+        this._seek.add_style_class_name('nowpill-slider');
+        this._seek.add_style_class_name('nowpill-seek');
+        const times = hbox({style_class: 'nowpill-times'});
+        this._elapsed = label('', 'nowpill-time', {x_expand: true});
+        this._remaining = label('', 'nowpill-time');
         times.add_child(this._elapsed);
         times.add_child(this._remaining);
         this._seekBox.add_child(this._seek);
@@ -192,10 +192,10 @@ export class MediaCard {
         });
 
         // shuffle · previous · play · next · repeat; ±10 s stay on [ and ].
-        const controls = hbox({style_class: 'nowbar-media-controls', x_align: Clutter.ActorAlign.CENTER});
+        const controls = hbox({style_class: 'nowpill-media-controls', x_align: Clutter.ActorAlign.CENTER});
         const ctl = (icon, action, name, cls) => {
             // Centered, not stretched to the row's height: every one stays a circle.
-            const b = button({icon, styleClass: `nowbar-round ${cls}`, accessibleName: name,
+            const b = button({icon, styleClass: `nowpill-round ${cls}`, accessibleName: name,
                 onClick: () => ctx.service.act(this._a.id, action)});
             b.y_align = Clutter.ActorAlign.CENTER;
             controls.add_child(b);
@@ -209,12 +209,12 @@ export class MediaCard {
         body.add_child(controls);
         this._controls = controls;
 
-        this._volumeRow = hbox({style_class: 'nowbar-volume-row'});
-        this._volumeIcon = new St.Icon({icon_name: 'audio-volume-medium-symbolic', style_class: 'nowbar-volume-icon'});
+        this._volumeRow = hbox({style_class: 'nowpill-volume-row'});
+        this._volumeIcon = new St.Icon({icon_name: 'audio-volume-medium-symbolic', style_class: 'nowpill-volume-icon'});
         this._volumeRow.add_child(this._volumeIcon);
         this._volume = new Slider.Slider(0);
         this._volume.x_expand = true;
-        this._volume.add_style_class_name('nowbar-slider');
+        this._volume.add_style_class_name('nowpill-slider');
         this._volumeRow.add_child(this._volume);
         // While the user moves it, and for a moment after, the player's own
         // value (which lags behind) doesn't pull the slider back.
@@ -406,10 +406,10 @@ export class LockMediaCard extends MediaCard {
     constructor(ctx, a) {
         super(ctx, a);
         const cover = this.actor;
-        cover.add_style_class_name('nowbar-lock-cover');
+        cover.add_style_class_name('nowpill-lock-cover');
         // Down to the bottom of the cover (a bin won't align it there).
         this._body.insert_child_at_index(new St.Widget({y_expand: true}), 0);
-        this.actor = vbox({style_class: 'nowbar-lock-media', x_expand: true});
+        this.actor = vbox({style_class: 'nowpill-lock-media', x_expand: true});
         this.actor.add_child(cover);
         for (const part of [this._seekBox, this._controls]) {
             this._body.remove_child(part);
@@ -432,51 +432,51 @@ export class LockMediaCard extends MediaCard {
 export class WeatherCard {
     constructor(ctx, a) {
         this._ctx = ctx;
-        this.actor = vbox({style_class: 'nowbar-card nowbar-weather', x_expand: true});
+        this.actor = vbox({style_class: 'nowpill-card nowpill-weather', x_expand: true});
 
-        const head = hbox({style_class: 'nowbar-card-head'});
-        this._icon = new St.Icon({style_class: 'nowbar-weather-icon'});
+        const head = hbox({style_class: 'nowpill-card-head'});
+        this._icon = new St.Icon({style_class: 'nowpill-weather-icon'});
         head.add_child(this._icon);
         const texts = vbox({x_expand: true, y_align: Clutter.ActorAlign.CENTER});
-        this._temp = label('', 'nowbar-weather-temp');
-        this._desc = label('', 'nowbar-card-subtitle');
+        this._temp = label('', 'nowpill-weather-temp');
+        this._desc = label('', 'nowpill-card-subtitle');
         texts.add_child(this._temp);
         texts.add_child(this._desc);
         head.add_child(texts);
         const side = vbox({y_align: Clutter.ActorAlign.CENTER, x_align: Clutter.ActorAlign.END});
         // The place: a click opens GNOME Weather, where it is picked.
-        this._place = button({icon: 'mark-location-symbolic', styleClass: 'flat nowbar-place',
+        this._place = button({icon: 'mark-location-symbolic', styleClass: 'flat nowpill-place',
             onClick: () => {
                 if (ctx.service.locked)
                     return;
                 ctx.closeMenu();
                 ctx.service.weather.openApp();
             }});
-        this._placeLabel = label('', 'nowbar-btn-label');
+        this._placeLabel = label('', 'nowpill-btn-label');
         this._place.child.add_child(this._placeLabel);
-        this._range = label('', 'nowbar-card-detail', {x_align: Clutter.ActorAlign.END});
+        this._range = label('', 'nowpill-card-detail', {x_align: Clutter.ActorAlign.END});
         side.add_child(this._place);
         side.add_child(this._range);
         head.add_child(side);
         this.actor.add_child(head);
 
         // Rain on the way.
-        this._rain = hbox({style_class: 'nowbar-weather-rain'});
-        this._rainIcon = new St.Icon({style_class: 'nowbar-weather-rain-icon'});
-        this._rainLabel = label('', 'nowbar-weather-rain-label');
+        this._rain = hbox({style_class: 'nowpill-weather-rain'});
+        this._rainIcon = new St.Icon({style_class: 'nowpill-weather-rain-icon'});
+        this._rainLabel = label('', 'nowpill-weather-rain-label');
         this._rain.add_child(this._rainIcon);
         this._rain.add_child(this._rainLabel);
         this.actor.add_child(this._rain);
 
-        this._facts = hbox({style_class: 'nowbar-weather-facts'});
+        this._facts = hbox({style_class: 'nowpill-weather-facts'});
         this.actor.add_child(this._facts);
-        this._hours = hbox({style_class: 'nowbar-weather-hours'});
+        this._hours = hbox({style_class: 'nowpill-weather-hours'});
         this.actor.add_child(this._hours);
-        this._days = vbox({style_class: 'nowbar-weather-days'});
+        this._days = vbox({style_class: 'nowpill-weather-days'});
         this.actor.add_child(this._days);
 
-        const foot = hbox({style_class: 'nowbar-weather-foot'});
-        this._age = label('', 'nowbar-card-detail', {x_expand: true});
+        const foot = hbox({style_class: 'nowpill-weather-foot'});
+        this._age = label('', 'nowpill-card-detail', {x_expand: true});
         foot.add_child(this._age);
         foot.add_child(button({icon: 'view-refresh-symbolic', styleClass: 'flat', accessibleName: 'Refresh',
             onClick: () => ctx.service.weather.refresh()}));
@@ -512,9 +512,9 @@ export class WeatherCard {
         const fact = (icon, text) => {
             if (!text)
                 return;
-            const b = hbox({style_class: 'nowbar-fact'});
-            b.add_child(new St.Icon({icon_name: icon, style_class: 'nowbar-fact-icon'}));
-            b.add_child(label(text, 'nowbar-card-detail'));
+            const b = hbox({style_class: 'nowpill-fact'});
+            b.add_child(new St.Icon({icon_name: icon, style_class: 'nowpill-fact-icon'}));
+            b.add_child(label(text, 'nowpill-card-detail'));
             this._facts.add_child(b);
         };
         fact('weather-windy-symbolic', w.wind);
@@ -523,11 +523,11 @@ export class WeatherCard {
 
         this._hours.destroy_all_children();
         for (const h of w.hours) {
-            const col = vbox({style_class: 'nowbar-hour', x_expand: true});
-            col.add_child(label(h.label, 'nowbar-hour-label', {x_align: Clutter.ActorAlign.CENTER}));
-            col.add_child(new St.Icon({icon_name: iconFor(h.icon, 'weather'), style_class: 'nowbar-hour-icon',
+            const col = vbox({style_class: 'nowpill-hour', x_expand: true});
+            col.add_child(label(h.label, 'nowpill-hour-label', {x_align: Clutter.ActorAlign.CENTER}));
+            col.add_child(new St.Icon({icon_name: iconFor(h.icon, 'weather'), style_class: 'nowpill-hour-icon',
                 x_align: Clutter.ActorAlign.CENTER}));
-            col.add_child(label(`${h.temp}°`, 'nowbar-hour-temp', {x_align: Clutter.ActorAlign.CENTER}));
+            col.add_child(label(`${h.temp}°`, 'nowpill-hour-temp', {x_align: Clutter.ActorAlign.CENTER}));
             this._hours.add_child(col);
         }
         this._hours.visible = w.hours.length > 1;
@@ -539,18 +539,18 @@ export class WeatherCard {
         const span = Math.max(1, hi - lo);
         const BAR = 110;
         for (const d of w.days) {
-            const row = hbox({style_class: 'nowbar-day'});
-            row.add_child(label(d.name, 'nowbar-day-name'));
-            row.add_child(new St.Icon({icon_name: iconFor(d.icon, 'weather'), style_class: 'nowbar-day-icon'}));
-            row.add_child(label(`${d.min}°`, 'nowbar-day-temp', {x_expand: true, x_align: Clutter.ActorAlign.END}));
-            const track = new St.Widget({style_class: 'nowbar-day-track', style: `width: ${BAR}px;`,
+            const row = hbox({style_class: 'nowpill-day'});
+            row.add_child(label(d.name, 'nowpill-day-name'));
+            row.add_child(new St.Icon({icon_name: iconFor(d.icon, 'weather'), style_class: 'nowpill-day-icon'}));
+            row.add_child(label(`${d.min}°`, 'nowpill-day-temp', {x_expand: true, x_align: Clutter.ActorAlign.END}));
+            const track = new St.Widget({style_class: 'nowpill-day-track', style: `width: ${BAR}px;`,
                 y_align: Clutter.ActorAlign.CENTER});
             const left = Math.round((d.min - lo) / span * BAR);
             const width = Math.max(6, Math.round((d.max - d.min) / span * BAR));
-            track.add_child(new St.Widget({style_class: 'nowbar-day-fill',
+            track.add_child(new St.Widget({style_class: 'nowpill-day-fill',
                 style: `margin-left: ${left}px; width: ${Math.min(width, BAR - left)}px;`}));
             row.add_child(track);
-            row.add_child(label(`${d.max}°`, 'nowbar-day-temp'));
+            row.add_child(label(`${d.max}°`, 'nowpill-day-temp'));
             this._days.add_child(row);
         }
         this._age.text = a.fetching ? 'Updating…' : a.age?.text ?? '';
