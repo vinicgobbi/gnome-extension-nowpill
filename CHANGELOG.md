@@ -1,3 +1,19 @@
+## v1 (2026-10-31)
+
+### BREAKING CHANGE
+
+- UUID, schema e nome D-Bus mudaram; quem tinha a Now Bar
+instalada precisa removê-la e instalar a Now Pill, e as configurações
+ficam no caminho antigo do dconf.
+
+### Fix
+
+- ajusta a extensão aos avisos do shexli
+
+### Refactor
+
+- renomeia a extensão para Now Pill
+
 ## v0.2.0 (2026-10-31)
 
 ### Feat

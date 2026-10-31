@@ -7,7 +7,7 @@ version_provider = "commitizen"
 # commitizen só decide se há release (algum feat/fix/BREAKING desde a
 # última); o workflow passa a próxima como N.0.0 e a tag fica vN. A v0.2.0,
 # de antes disso, segue reconhecida pelo formato antigo.
-version = "0.2.0"
+version = "1.0.0"
 tag_format = "v$major"
 legacy_tag_formats = ["v$version"]
 changelog_file = "CHANGELOG.md"
